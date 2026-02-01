@@ -47,7 +47,7 @@ export default async function handler(req, res) {
         console.error("Invalid JSON body", err);
         body = {};
       }
-      
+      const { text } = body;
       if (!text || !text.trim()) {
         return res.status(400).json({ error: "Text is required" });
       }
