@@ -30,10 +30,18 @@ export default async function handler(req, res) {
 
   if (req.method === "PUT" || req.method === "PATCH") {
     try {
-      const body =
-        typeof req.body === "string"
-          ? JSON.parse(req.body || "{}")
-          : req.body || {};
+      // const body =
+      //   typeof req.body === "string"
+      //     ? JSON.parse(req.body || "{}")
+      //     : req.body || {};
+      let body = {};
+      try {
+        body =
+          typeof req.body === "string" ? JSON.parse(req.body) : req.body || {};
+      } catch {
+        body = {};
+      }
+
       const update = {};
       if (typeof body.text === "string") update.text = body.text.trim();
       if (typeof body.completed === "boolean")
@@ -41,7 +49,7 @@ export default async function handler(req, res) {
       const todo = await Todo.findOneAndUpdate(
         { _id: id, user: user._id },
         update,
-        { new: true }
+        { new: true },
       );
       if (!todo) return res.status(404).json({ error: "Todo not found" });
       return res.status(200).json(todo);
