@@ -32,14 +32,22 @@ export default async function handler(req, res) {
       //     ? JSON.parse(req.body || "{}")
       //     : req.body || {};
       // const { text } = body;
+      // let body = {};
+      // try {
+      //   body =
+      //     typeof req.body === "string" ? JSON.parse(req.body) : req.body || {};
+      // } catch {
+      //   body = {};
+      // }
       let body = {};
       try {
         body =
           typeof req.body === "string" ? JSON.parse(req.body) : req.body || {};
-      } catch {
+      } catch (err) {
+        console.error("Invalid JSON body", err);
         body = {};
       }
-
+      
       if (!text || !text.trim()) {
         return res.status(400).json({ error: "Text is required" });
       }
